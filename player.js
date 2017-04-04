@@ -5,6 +5,7 @@
 class Player {
 
   constructor(params) {
+    console.log(params)
     this.name = params.name; 
     this.id = params.id;
     this.hp = params.hp;
@@ -24,8 +25,9 @@ class Player {
 
   updatePlayer(params) {
     this.hp = params.hp;
+    this.position = params.position;
   }
-  
+
 }
 
 module.exports = Player;
