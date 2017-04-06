@@ -3,6 +3,7 @@ let EventEmitter = require('events');
 
 let Player = require('./player');
 let TurnManager = require('./turnManager');
+let Game = require('./game');
 
 class GameServer extends EventEmitter {
 
@@ -12,6 +13,7 @@ class GameServer extends EventEmitter {
     this.running = false;
 
     this.turnManager = new TurnManager(url);
+    this.game = new Game();
   }
 
   registerPlayer(name) {
@@ -24,29 +26,38 @@ class GameServer extends EventEmitter {
     }
 
     console.log(`Attempting to register player with the name of ${name}`);
-    return request(addPlayerParams).then((body) => {
-      let msg = JSON.parse(body);
-      
-      this.player = new Player(msg.content);
-      console.log(`Player registered! Name: ${this.player.getName()} Id: ${this.player.getId()}`)
-    }).catch( error => {
-      console.error(`Unable to register player: ${error}`);
-    });
+    return request(addPlayerParams).then(
+      body => {
+        let msg = JSON.parse(body);
+        
+        this.player = new Player(msg.content);
+        console.log(`Player registered! Name: ${this.player.getName()} Id: ${this.player.getId()}`)
+
+        return this.player;
+      }, 
+      error => {
+        throw new Error(`Unable to register player: ${error.message}`);
+      }
+    );
   }
 
   start() {
     this.running = true;
     console.log("Starting server");
-    this.registerPlayer("Mada").then(() => {
-      this.sendTurn();
+
+    return this.registerPlayer("Adam").then(player => {
+      this.sendTurn(player, this.game);
     });
   }
 
-  sendTurn() {
-    let turn = this.turnManager.calculateTurn(this.player.getId());
+  sendTurn(player, game) {
+    let turn = this.turnManager.calculateTurn(player, game);
 
-    turn.then(() => {
-      this.sendTurn();
+    return turn.then( response => { 
+      let content = this.parseResponse(response);
+      this.game.updateFromJson(content.game);
+
+      return this.sendTurn(player, game);
     });
   }
 
@@ -57,11 +68,19 @@ class GameServer extends EventEmitter {
   gameOver() {
     console.log("Game over!");
   }
+
+  parseResponse(response) {
+    let json = JSON.parse(response);
+
+    return json.content;
+  }
 }
 
 let url = "http://localhost:8282";
 let gameServer = new GameServer(url);
-gameServer.start();
+gameServer.start().catch( error => {
+  console.error(error);
+});
 
 
 

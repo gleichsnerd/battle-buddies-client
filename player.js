@@ -9,6 +9,7 @@ class Player {
     this.name = params.name; 
     this.id = params.id;
     this.hp = params.hp;
+    this.position = params.pos;
   }
   
   getName() {
@@ -23,9 +24,13 @@ class Player {
     return this.hp;
   }
 
+  getPosition() {
+    return this.position;
+  }
+
   updatePlayer(params) {
     this.hp = params.hp;
-    this.position = params.position;
+    this.position = params.pos;
   }
 
 }

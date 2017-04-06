@@ -14,7 +14,8 @@ class TurnManager extends EventEmitter {
     }
   }
 
-  calculateTurn(pid) {
+  calculateTurn(player, game) {
+    let pid = player.getId();
     let body = this.randomWalkParams(pid);
     let params = {
       method: 'POST',
@@ -59,11 +60,7 @@ class TurnManager extends EventEmitter {
     }
 
     return request(turnParams).then( body => {
-      let msg = JSON.parse(body);
-    
-      console.log(msg.content);
-      console.log(`TURN COMPLETE`);
-      this.emit('turnComplete');
+      
     }).catch( error => {
       console.error(`Unable to play turn: ${error}`);
     });
