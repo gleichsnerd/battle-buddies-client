@@ -3,11 +3,12 @@ let Player = require('./player');
 class Game {
   
   constructor() {
-
+    this.players = {};
   }
 
   updateFromJson(response) {
     this.board = response.board;
+    console.log(`Players Array ${response.players}`);
     this.players = this.parsePlayers(response.players);
   }
 
@@ -27,8 +28,15 @@ class Game {
     let dist = 10000;
     let closestPlayer;
 
-    for(let player in players) {
-      if(player.getId() !== self.getId()) {
+    for(let pid in players) {
+      let player = players[pid];
+
+      console.log(`Enemy ${player.getName()}`);
+      console.log(`Self ${self.getName()}`);
+
+
+      if(pid !== self.getId()) {
+        console.log("Enemy spotted");
         let newDist = this.getDistanceBetweenPlayers(self, player);
 
         if(dist > newDist) {
@@ -47,17 +55,22 @@ class Game {
     let x2 = p2.getPosition().x;
     let y2 = p2.getPosition().y;
 
-    return Math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2);
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   }
 
-  getDirectionFromCoordinates(selfX, selfY, pX, pY) {
+  getDirectionTowardsPlayer(self, player) {
+    let selfX = self.getPosition().x,
+        selfY = self.getPosition().y, 
+        pX = player.getPosition().x, 
+        pY = player.getPosition().y;
+    
     if (pX > selfX) {
       return "right";
     } else if (pX < selfX) {
       return "left";
-    } else if (pY > selfY) {
-      return "up";
     } else if (pY < selfY) {
+      return "up";
+    } else if (pY > selfY) {
       return "down";
     }
 

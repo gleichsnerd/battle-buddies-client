@@ -29,7 +29,7 @@ class Player {
   }
 
   updatePlayer(params) {
-    this.hp = params.hp;
+    console.log(`params ${params}`)
     this.position = params.pos;
   }
 

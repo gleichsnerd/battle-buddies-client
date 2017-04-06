@@ -16,13 +16,33 @@ class TurnManager extends EventEmitter {
 
   calculateTurn(player, game) {
     let pid = player.getId();
-    let body = this.randomWalkParams(pid);
+
+    let enemy = game.nearestPlayerTo(player);
+
+    let direction = "down";
+
+    if(enemy) {
+      direction = game.getDirectionTowardsPlayer(player, enemy);
+      console.log(`enemy is ${game.getDistanceBetweenPlayers(player, enemy)} away`);
+    }
+
+    let body = {
+      player_id: pid,
+      direction: direction,
+      action: "move"
+    }
+
+    if(enemy && game.getDistanceBetweenPlayers(player, enemy) === 1) {
+      body.action = "attack";
+    }
+
     let params = {
       method: 'POST',
       uri: this.turnUrl(),
       form: body
     }
 
+    console.log(`${body.action} ${body.direction}`);
 
     return request(params);
   }

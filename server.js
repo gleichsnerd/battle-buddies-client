@@ -46,6 +46,7 @@ class GameServer extends EventEmitter {
     console.log("Starting server");
 
     return this.registerPlayer("Adam").then(player => {
+      console.log(player);
       this.sendTurn(player, this.game);
     });
   }
@@ -56,6 +57,7 @@ class GameServer extends EventEmitter {
     return turn.then( response => { 
       let content = this.parseResponse(response);
       this.game.updateFromJson(content.game);
+      player.updatePlayer(content.game.player);
 
       return this.sendTurn(player, game);
     });
