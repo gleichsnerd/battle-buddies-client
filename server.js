@@ -20,6 +20,7 @@ class GameServer extends EventEmitter {
     let addPlayerParams = {
       method: 'POST',
       uri: `${this.url}/player`,
+      timeout: 600000,
       form : {
         name: name
       }

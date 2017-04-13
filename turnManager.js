@@ -19,7 +19,7 @@ class TurnManager extends EventEmitter {
 
     let enemy = game.nearestPlayerTo(player);
 
-    let direction = "down";
+    let direction = "none";
 
     if(enemy) {
       direction = game.getDirectionTowardsPlayer(player, enemy);
