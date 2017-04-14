@@ -43,11 +43,9 @@ class GameServer extends EventEmitter {
   }
 
   start() {
-    this.running = true;
     console.log("Starting server");
 
     return this.registerPlayer("Adam").then(player => {
-      console.log(player);
       this.sendTurn(player, this.game);
     });
   }
@@ -58,7 +56,12 @@ class GameServer extends EventEmitter {
     return turn.then( response => { 
       let content = this.parseResponse(response);
       this.game.updateFromJson(content.game);
+
       player.updatePlayer(content.game.player);
+
+      if(player.isDead()) {
+        return this.gameOver();
+      }
 
       return this.sendTurn(player, game);
     });
@@ -84,32 +87,3 @@ let gameServer = new GameServer(url);
 gameServer.start().catch( error => {
   console.error(error);
 });
-
-
-
-
-// console.log("Starting server")
-
-// let addPlayerParams = {
-//   url: `${url}player`,
-//   form: {
-//     name: "Adam"
-//   }
-// };
-
-// request.post(addPlayerParams, function(err, res, body) {
-  
-
-//   let moveRightParams = {
-//     url: `${url}game/turn`,
-//     form: {
-//       player_id: this.player.getId(),
-//       action: "move",
-//       direction: "right"
-//     }
-//   }
-
-//   request.post(moveRightParams, function(err, res, body) {
-//     console.log(body);
-//   });
-// });

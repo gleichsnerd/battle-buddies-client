@@ -23,7 +23,6 @@ class TurnManager extends EventEmitter {
 
     if(enemy) {
       direction = game.getDirectionTowardsPlayer(player, enemy);
-      console.log(`enemy is ${game.getDistanceBetweenPlayers(player, enemy)} away`);
     }
 
     let body = {

@@ -5,10 +5,11 @@
 class Player {
 
   constructor(params) {
-    console.log(params)
     this.name = params.name; 
     this.id = params.id;
+    this.publicId = params.public_id;
     this.hp = params.hp;
+    this.defence = params.defence;
     this.position = params.pos;
   }
   
@@ -20,8 +21,16 @@ class Player {
     return this.id;
   }
 
+  getPublicId() {
+    return this.publicId;
+  }
+
   getHp() {
     return this.hp;
+  }
+
+  getDefence() {
+    return this.defence;
   }
 
   getPosition() {
@@ -29,8 +38,13 @@ class Player {
   }
 
   updatePlayer(params) {
-    console.log(`params ${params}`)
     this.position = params.pos;
+    this.hp = params.hp;
+    this.defence = params.defence;
+  }
+
+  isDead() {
+    return this.getHp() <= 0;
   }
 
 }

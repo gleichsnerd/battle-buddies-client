@@ -8,15 +8,20 @@ class Game {
 
   updateFromJson(response) {
     this.board = response.board;
-    console.log(`Players Array ${response.players}`);
-    this.players = this.parsePlayers(response.players);
+    this.players = this.parseBoardForPlayers(response.board);
   }
 
-  parsePlayers(playerJsonArray) {
+  parseBoardForPlayers(board) {
     let playerHash = {};
     
-    playerJsonArray.forEach(playerJson => {
-      playerHash[playerJson.id] = new Player(playerJson);
+    board.grid.forEach( (column, x) => {
+      column.forEach( (cell, y) => {
+        if (cell != null) {
+          cell.pos = { x : x, y : y };
+          
+          playerHash[cell.public_id] = new Player(cell);
+        }
+      })
     });
 
     return playerHash;
@@ -31,17 +36,13 @@ class Game {
     for(let pid in players) {
       let player = players[pid];
 
-      console.log(`Enemy ${player.getName()}`);
-      console.log(`Self ${self.getName()}`);
-
-
-      if(pid !== self.getId()) {
-        console.log("Enemy spotted");
+      if(pid !== self.getPublicId()) {
         let newDist = this.getDistanceBetweenPlayers(self, player);
 
         if(dist > newDist) {
           dist = newDist;
           closestPlayer = player;
+          console.log(`Target acquired: ${closestPlayer.getName()} ${dist} spaces away`);
         }
       }
     }
