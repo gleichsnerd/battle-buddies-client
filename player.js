@@ -11,6 +11,7 @@ class Player {
     this.hp = params.hp;
     this.defence = params.defence;
     this.position = params.pos;
+    this.turns = params.turns;
   }
   
   getName() {
@@ -41,6 +42,27 @@ class Player {
     this.position = params.pos;
     this.hp = params.hp;
     this.defence = params.defence;
+    this.turns = params.turns;
+  }
+
+  getLatestTurn() {
+    let turns = this.turns;
+    if(turns != null) {
+      return turns[turns.length - 1];
+    }
+    return {};
+  }
+
+  wasAttacked() {
+    let turn = this.getLatestTurn();
+
+    turn.events.forEach(event => {
+      if(event.action == "attacked" && event.success = false) {
+        return true;
+      }
+    });
+
+    return false;
   }
 
   isDead() {
