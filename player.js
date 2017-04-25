@@ -10,7 +10,7 @@ class Player {
     this.publicId = params.public_id;
     this.hp = params.hp;
     this.defence = params.defence;
-    this.position = params.pos;
+    this.position = params.position;
   }
   
   getName() {

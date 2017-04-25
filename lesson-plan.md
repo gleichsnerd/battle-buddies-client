@@ -166,7 +166,23 @@
 
 ## 3. Register a Player
 
-1. Make the player class
+1. Make the player class, player.js
+    ```javascript
+    /**
+     * Player
+     */
+
+    class Player {
+      constructor(params) {
+        this.id = params.id;
+        this.publicId = params.public_id;
+        this.name = params.name;
+        this.hp = params.hp;
+        this.defense = params.defense;
+        this.position = params.position;
+      }
+    }
+    ```
 
 2. Add POST to RequestService
 
