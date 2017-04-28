@@ -17,7 +17,7 @@ class Game {
     board.grid.forEach( (column, x) => {
       column.forEach( (cell, y) => {
         if (cell != null) {
-          cell.pos = { x : x, y : y };
+          cell.position = { x : x, y : y };
           
           playerHash[cell.public_id] = new Player(cell);
         }
@@ -67,13 +67,13 @@ class Game {
     
     if (pX > selfX) {
       return "right";
-    } else if (pX < selfX) {
-      return "left";
     } else if (pY < selfY) {
       return "up";
     } else if (pY > selfY) {
       return "down";
-    }
+    } else if (pX < selfX) {
+      return "left";
+    } 
 
     return "none";
   }
