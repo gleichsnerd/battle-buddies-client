@@ -39,7 +39,7 @@ class Player {
   }
 
   updatePlayer(params) {
-    this.position = params.pos;
+    this.position = params.position;
     this.hp = params.hp;
     this.defence = params.defence;
     this.turns = params.turns;
@@ -57,7 +57,7 @@ class Player {
     let turn = this.getLatestTurn();
 
     turn.events.forEach(event => {
-      if(event.action == "attacked" && event.success = false) {
+      if(event.action === "attacked" && event.success === false) {
         return true;
       }
     });
